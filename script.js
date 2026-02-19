@@ -152,6 +152,7 @@ function initWelcomeOverlay() {
       clearInterval(interval);
       setTimeout(() => {
         overlay.classList.add('hidden');
+        overlay.style.pointerEvents = 'none';
         // Show loader briefly then hide
         const loader = document.getElementById('loader');
         if (loader) {
@@ -159,6 +160,8 @@ function initWelcomeOverlay() {
           setTimeout(() => {
             loader.classList.remove('active');
             loader.classList.add('hidden');
+            loader.style.pointerEvents = 'none';
+            loader.style.display = 'none';
             initScrollReveal();
             initGreeting();
             initIndiaMap();
@@ -895,6 +898,20 @@ let currentUser = JSON.parse(localStorage.getItem('pyti_user') || 'null');
 // On init — reflect login state in navbar
 window.addEventListener('DOMContentLoaded', () => {
   refreshNavAuth();
+
+  // ── MOBILE SCROLL FIX ─────────────────────────────────────────
+  // iOS Safari doesn't reliably handle href="#section" with fixed nav.
+  // Override ALL internal anchor links to use JS scrollIntoView.
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      const navH = document.getElementById('navbar')?.offsetHeight || 70;
+      const top = target.getBoundingClientRect().top + window.scrollY - navH;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }, { passive: false });
+  });
 });
 
 function refreshNavAuth() {
