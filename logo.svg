@@ -1,0 +1,28 @@
+<svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Gradient Definition -->
+  <defs>
+    <linearGradient id="purpleMinimal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6A00FF"/>
+      <stop offset="100%" stop-color="#B000FF"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Minimal Circle Background -->
+  <circle cx="90" cy="90" r="70" fill="url(#purpleMinimal)" />
+
+  <!-- Simple Location Pin Outline -->
+  <path d="M90 55
+           C72 55, 60 70, 60 88
+           C60 115, 90 135, 90 135
+           C90 135, 120 115, 120 88
+           C120 70, 108 55, 90 55 Z"
+        fill="none"
+        stroke="white"
+        stroke-width="5"
+        stroke-linejoin="round"/>
+
+  <!-- Center Dot -->
+  <circle cx="90" cy="88" r="8" fill="white"/>
+
+</svg>
