@@ -252,16 +252,16 @@ function updateActiveNav() {
 
   overlay.addEventListener('click', e => {
     const t = e.target;
-    if (t.id === 'mobLoginBtn') { closeNav(); openModal('loginModal'); }
+    if (t.id === 'mobLoginBtn')  { closeNav(); openModal('loginModal'); }
     if (t.id === 'mobSignupBtn') { closeNav(); openModal('signupModal'); }
     if (t.dataset.logout !== undefined) { closeNav(); logoutUser(); }
   });
 
-  window.updateMobileAuthUI = function () {
+  window.updateMobileAuthUI = function() {
     const area = document.getElementById('mobileAuthBtns');
     if (!area) return;
     if (currentUser) {
-      const initials = ((currentUser.first || '?')[0] + (currentUser.last || '?')[0]).toUpperCase();
+      const initials = ((currentUser.first||'?')[0]+(currentUser.last||'?')[0]).toUpperCase();
       area.innerHTML = `
         <div class="nav-user-badge" style="justify-content:center;gap:.6rem">
           <div class="nav-user-avatar">${initials}</div>
@@ -309,8 +309,11 @@ function initIndiaMap() {
     maxZoom: 8,
     zoomControl: true,
     scrollWheelZoom: false,
-    tap: true,             // enable mobile tap
-    tapTolerance: 15,      // more forgiving tap
+    dragging: true,
+    tap: true,
+    tapTolerance: 20,
+    touchZoom: true,
+    doubleClickZoom: false,
     maxBounds: [[5, 65], [38, 100]],
     maxBoundsViscosity: 1.0
   });
@@ -346,6 +349,11 @@ function initIndiaMap() {
               stateLayer.resetStyle(e.target);
             },
             click: e => {
+              L.DomEvent.stopPropagation(e);
+              onStateClick(name);
+            },
+            touchend: e => {
+              L.DomEvent.stopPropagation(e);
               onStateClick(name);
             }
           });
@@ -383,7 +391,8 @@ function loadIndiaMapFallback() {
               e.target.setStyle({ fillColor: '#FEFACD', fillOpacity: 0.35, color: '#FEFACD', weight: 2 });
             },
             mouseout: e => stateLayer.resetStyle(e.target),
-            click: () => onStateClick(name)
+            click: e => { L.DomEvent.stopPropagation(e); onStateClick(name); },
+            touchend: e => { L.DomEvent.stopPropagation(e); onStateClick(name); }
           });
         }
       }).addTo(indiaMapInstance);
